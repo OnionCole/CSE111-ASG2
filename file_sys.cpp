@@ -44,8 +44,8 @@ void inode_state::cout_abs_path() {
     for (auto iter = abs_path_str.begin();
            iter != abs_path_str.end(); ++iter) {
         cout << *iter;
-        if (*iter == abs_path_str[0] || 
-               iter == abs_path_str.end() - 1) {
+        if (*iter != abs_path_str[0] && 
+               iter != abs_path_str.end() - 1) {
             cout << "/";
         }
     }
