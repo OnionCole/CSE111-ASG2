@@ -28,6 +28,8 @@ inode_state::inode_state() {
    DEBUGF ('i', "root = " << root << ", cwd = " << cwd
            << ", prompt = \"" << prompt() << "\""
            << ", file_type = " << root->contents->file_type());
+
+   abs_path_str.push_back("/");
 }
 
 const string& inode_state::prompt() const { return prompt_; }
@@ -39,9 +41,11 @@ void inode_state::prompt (const string& new_prompt) {
 void inode_state::cout_abs_path() {
     // cout the stored abs_path, for pwd command
 
-    for (auto iter = std::begin(abs_path_str); iter != std::end(abs_path_str); ++iter) {
+    for (auto iter = abs_path_str.begin();
+           iter != abs_path_str.end(); ++iter) {
         cout << *iter;
-        if (*iter == abs_path_str[0] || iter == std::end(abs_path_str) - 1) {
+        if (*iter == abs_path_str[0] || 
+               iter == abs_path_str.end() - 1) {
             cout << "/";
         }
     }
