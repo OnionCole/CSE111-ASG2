@@ -4,18 +4,19 @@
 #include "debug.h"
 
 const command_hash cmd_hash {
-   {"cat"   , fn_cat   },
-   {"cd"    , fn_cd    },
-   {"echo"  , fn_echo  },
-   {"exit"  , fn_exit  },
-   {"ls"    , fn_ls    },
-   {"lsr"   , fn_lsr   },
-   {"make"  , fn_make  },
-   {"mkdir" , fn_mkdir },
-   {"prompt", fn_prompt},
-   {"pwd"   , fn_pwd   },
-   {"rm"    , fn_rm    },
-   {"rmr"   , fn_rmr   },
+   {"#"     , fn_comment},
+   {"cat"   , fn_cat    },
+   {"cd"    , fn_cd     },
+   {"echo"  , fn_echo   },
+   {"exit"  , fn_exit   },
+   {"ls"    , fn_ls     },
+   {"lsr"   , fn_lsr    },
+   {"make"  , fn_make   },
+   {"mkdir" , fn_mkdir  },
+   {"prompt", fn_prompt },
+   {"pwd"   , fn_pwd    },
+   {"rm"    , fn_rm     },
+   {"rmr"   , fn_rmr    },
 };
 
 command_fn find_command_fn (const string& cmd) {
@@ -41,6 +42,11 @@ int exit_status_message() {
 }
 
 
+void fn_comment(inode_state& state, const wordvec& words) {  // do nothing
+   DEBUGF('c', state);
+   DEBUGF('c', words);
+}
+
 void fn_cat (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);

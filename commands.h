@@ -25,18 +25,19 @@ class command_error: public runtime_error {
 
 // execution functions -
 
-void fn_cat    (inode_state& state, const wordvec& words);
-void fn_cd     (inode_state& state, const wordvec& words);
-void fn_echo   (inode_state& state, const wordvec& words);
-void fn_exit   (inode_state& state, const wordvec& words);
-void fn_ls     (inode_state& state, const wordvec& words);
-void fn_lsr    (inode_state& state, const wordvec& words);
-void fn_make   (inode_state& state, const wordvec& words);
-void fn_mkdir  (inode_state& state, const wordvec& words);
-void fn_prompt (inode_state& state, const wordvec& words);
-void fn_pwd    (inode_state& state, const wordvec& words);
-void fn_rm     (inode_state& state, const wordvec& words);
-void fn_rmr    (inode_state& state, const wordvec& words);
+void fn_comment (inode_state& state, const wordvec& words);
+void fn_cat     (inode_state& state, const wordvec& words);
+void fn_cd      (inode_state& state, const wordvec& words);
+void fn_echo    (inode_state& state, const wordvec& words);
+void fn_exit    (inode_state& state, const wordvec& words);
+void fn_ls      (inode_state& state, const wordvec& words);
+void fn_lsr     (inode_state& state, const wordvec& words);
+void fn_make    (inode_state& state, const wordvec& words);
+void fn_mkdir   (inode_state& state, const wordvec& words);
+void fn_prompt  (inode_state& state, const wordvec& words);
+void fn_pwd     (inode_state& state, const wordvec& words);
+void fn_rm      (inode_state& state, const wordvec& words);
+void fn_rmr     (inode_state& state, const wordvec& words);
 
 command_fn find_command_fn (const string& command);
 
