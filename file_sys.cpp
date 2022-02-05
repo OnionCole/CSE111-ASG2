@@ -36,6 +36,18 @@ void inode_state::prompt (const string& new_prompt) {
    prompt_ = new_prompt;
 }
 
+void inode_state::cout_abs_path() {
+    // cout the stored abs_path, for pwd command
+
+    for (auto iter = std::begin(abs_path_str); iter != std::end(abs_path_str); ++iter) {
+        cout << *iter;
+        if (*iter == abs_path_str[0] || iter == std::end(abs_path_str) - 1) {
+            cout << "/";
+        }
+    }
+    cout << endl;  // newline
+}
+
 ostream& operator<< (ostream& out, const inode_state& state) {
    out << "inode_state: root = " << state.root
        << ", cwd = " << state.cwd;
