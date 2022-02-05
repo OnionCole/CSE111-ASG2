@@ -40,7 +40,7 @@ class inode_state {
       inode_ptr cwd {nullptr};
       string prompt_ {"% "};
 
-      vector<string> abs_path_str;  // keeps the path print str updated
+      wordvec abs_path_str;  // keeps the path print str updated
    public:
       inode_state (const inode_state&) = delete; // copy ctor
       inode_state& operator= (const inode_state&) = delete; // op=

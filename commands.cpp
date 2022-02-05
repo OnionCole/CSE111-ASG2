@@ -99,6 +99,26 @@ void fn_mkdir (inode_state& state, const wordvec& words) {
 void fn_prompt (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   string new_prompt = "";
+   if (words.size() == 1) {
+      new_prompt = " ";
+   } else {
+      bool first_loop = true;
+      for (auto iter = words.begin();
+            iter != words.end(); ++iter) {
+         if (first_loop) {
+            first_loop = false;
+            continue;
+         }
+         new_prompt += *iter;
+         new_prompt += " ";
+      }
+   }
+
+   state.prompt(new_prompt);
+
+   // MEM LEAK?
 }
 
 void fn_pwd (inode_state& state, const wordvec& words) {
