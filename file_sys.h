@@ -81,6 +81,8 @@ class inode {
       size_t get_inode_nr() const;
       directory_entries& get_dirents();
 
+      size_t size();
+
       void fs_ls();
 };
 
@@ -132,6 +134,8 @@ class plain_file: public base_file {
          static const string result = "plain file";
          return result;
       }
+
+      size_t display_size = 0;  // for ls, must be kept updated
    public:
       virtual size_t size() const override;
       virtual const wordvec& readfile() const override;
@@ -164,6 +168,8 @@ class directory: public base_file {
          static const string result = "directory";
          return result;
       }
+
+      size_t display_size = 0;  // for ls, must be kept updated
    public:
       virtual size_t size() const override;
       virtual void remove (const string& filename) override;

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
+#include <iomanip>
 
 using namespace std;
 
@@ -84,6 +85,13 @@ directory_entries& inode::get_dirents() {
    return contents->get_dirents();
 }
 
+size_t inode::size() {
+   // return the "size" of this inode, for a dir thats how many elements
+         // for a file thats how many chars
+
+   return contents->size();
+}
+
 void inode::fs_ls() {
    // ls with this inode as target (only words if inode points to a 
          // dir)
@@ -128,9 +136,7 @@ void base_file::bf_ls() {
 
 
 size_t plain_file::size() const {
-   size_t size {0};
-   DEBUGF ('i', "size = " << size);
-   return size;
+   return display_size;
 }
 
 const wordvec& plain_file::readfile() const {
@@ -144,9 +150,7 @@ void plain_file::writefile (const wordvec& words) {
 
 
 size_t directory::size() const {
-   size_t size {0};
-   DEBUGF ('i', "size = " << size);
-   return size;
+   return display_size;
 }
 
 void directory::remove (const string& filename) {
@@ -170,6 +174,12 @@ directory_entries& directory::get_dirents() {
 void directory::bf_ls() {
    // do the ls output for this dir as the target
 
-
+   map<string, inode_ptr>::iterator iter;
+   for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
+      cout << iter->second->get_inode_nr() << std::setw(6);
+      cout << iter->second->size() << std::setw(6);
+      cout << iter->first << std::setw(6);
+      cout << endl;
+   }
 }
 
