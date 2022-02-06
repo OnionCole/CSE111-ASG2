@@ -243,7 +243,18 @@ void base_file::bf_ls() {
 
 
 size_t plain_file::size() const {
-   return 999;  // add up the total chars + spaces from the data field
+   
+   // add up the total chars + spaces from the data field
+   size_t sum = 0;
+   for (auto iter = data.begin();
+         iter != data.end(); ++iter) {
+      sum += (*iter).length() + 1;
+   }
+   if (sum > 0) {
+      sum -= 1;
+   }
+   
+   return sum;
 }
 
 const wordvec& plain_file::readfile() const {
@@ -313,7 +324,7 @@ void directory::bf_ls() {
 
    map<string, inode_ptr>::iterator iter;
    for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
-      cout << iter->second->get_inode_nr() << std::setw(6);
+      cout << "     " << iter->second->get_inode_nr();
       cout << "  ";
       cout << iter->second->size() << std::setw(6);
       cout << "  ";
