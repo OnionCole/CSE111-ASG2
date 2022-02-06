@@ -76,6 +76,16 @@ void fn_cat (inode_state& state, const wordvec& words) {
 void fn_cd (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if (words.size() > 2) {
+      throw command_error("cd: too many params");
+      return;
+   }
+   if (words.size() == 1) {  // no args, so target is root
+      state.fs_cd("/");
+   } else {
+      state.fs_cd(words.at(1));
+   }
 }
 
 void fn_echo (inode_state& state, const wordvec& words) {

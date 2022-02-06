@@ -30,7 +30,7 @@ inode_state::inode_state() {
            << ", prompt = \"" << prompt() << "\""
            << ", file_type = " << root->contents->file_type());
 
-   abs_path_str.push_back("/");
+   cwd_abs_path_str.push_back("/");
 }
 
 const string& inode_state::prompt() const { return prompt_; }
@@ -46,11 +46,11 @@ inode_ptr inode_state::get_cwd() {
 void inode_state::fs_pwd() {
     // pwd
 
-    for (auto iter = abs_path_str.begin();
-           iter != abs_path_str.end(); ++iter) {
+    for (auto iter = cwd_abs_path_str.begin();
+           iter != cwd_abs_path_str.end(); ++iter) {
         cout << *iter;
-        if (*iter != abs_path_str[0] && 
-               iter != abs_path_str.end() - 1) {
+        if (*iter != cwd_abs_path_str[0] && 
+               iter != cwd_abs_path_str.end() - 1) {
             cout << "/";
         }
     }
@@ -91,6 +91,40 @@ void inode_state::fs_cat(const string fn) {
       cout << *iter << " ";
    }
    cout << endl;
+}
+
+void inode_state::fs_cd(const string path) {
+   // arg path: path to cd to
+   // cd (only to a dir contained by the cwd)
+
+   if (path.compare("/") == 0) {  // if target is root
+      cwd = root;
+      cwd_abs_path_str.clear();
+      cwd_abs_path_str.push_back("/");
+   } else {
+      directory_entries dirents = cwd->contents->get_dirents();
+      if (dirents.find(path) == dirents.end()) {  // path does not 
+            // exist here
+         throw command_error("cd: bad path");
+         return;
+      }
+      inode_ptr target = dirents.at(path);
+      if (target->contents->file_type == file_type::PLAIN_TYPE) {
+         throw command_error("cd: path points to plain file");
+         return;
+      }
+
+      // since we confirmed the target; now do the cd
+      cwd = target;
+      if (path.compare("..") == 0) {  // in this we went up, otherwise
+            // we went down
+         if (cwd_abs_path_str.size() > 1) {
+            cwd_abs_path_str.pop_back();
+         }
+      } else {
+         cwd_abs_path_str.push_back(path);
+      }
+   }
 }
 
 ostream& operator<< (ostream& out, const inode_state& state) {

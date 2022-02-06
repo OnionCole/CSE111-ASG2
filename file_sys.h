@@ -49,7 +49,7 @@ class inode_state {
       inode_ptr cwd {nullptr};
       string prompt_ {"% "};
 
-      wordvec abs_path_str;  // keeps the path print str updated
+      wordvec cwd_abs_path_str;  // keeps the path print str updated
    public:
       inode_state (const inode_state&) = delete; // copy ctor
       inode_state& operator= (const inode_state&) = delete; // op=
@@ -63,6 +63,7 @@ class inode_state {
       void fs_pwd();
       void fs_make(const wordvec& words);
       void fs_cat(const string fn);
+      void fs_cd(const string path);
 };
 
 // class inode -
