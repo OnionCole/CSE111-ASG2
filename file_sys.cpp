@@ -124,7 +124,8 @@ void inode_state::fs_cat(const string fn) {
       return;
    }
 
-   wordvec data = cwd->contents->get_dirents().at(fn)->contents->readfile();
+   wordvec data = cwd->contents->get_dirents().
+         at(fn)->contents->readfile();
    for (auto iter = data.begin();
          iter != data.end(); ++iter) {
       cout << *iter << " ";

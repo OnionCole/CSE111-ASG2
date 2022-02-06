@@ -42,7 +42,8 @@ int exit_status_message() {
 }
 
 
-void fn_comment(inode_state& state, const wordvec& words) {  // do nothing
+void fn_comment(inode_state& state, const wordvec& words) {  // 
+      // do nothing
    DEBUGF('c', state);
    DEBUGF('c', words);
 }
