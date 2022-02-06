@@ -132,7 +132,7 @@ void fn_ls (inode_state& state, const wordvec& words) {
             continue;
          }
          
-         // for each target
+         // for each target   
          state.fs_ls(*iter);
       }
    }

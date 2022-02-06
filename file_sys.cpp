@@ -44,16 +44,21 @@ inode_ptr inode_state::get_cwd() {
 }
 
 void inode_state::fs_ls(const string path) {
-   // ls with the cwd and path to determine target, can work max one 
-         // level from cwd 
+   // ls with the cwd and path to determine target 
+         // (/ for root is OK though), can work max one level from cwd
    // (only works if inode points to a dir)
 
    inode_ptr target = nullptr;
-   try {
-      target = cwd->contents->get_dirents().at(path);
-   } catch (out_of_range& _) {
-      throw command_error("ls: no such path");
-      return;
+   if (path.compare("/") == 0) {  // if call is just "/" for root
+      target = root;
+   } else {  // if call is based on cwd
+      try {
+         target = cwd->contents->get_dirents().at(path);
+      }
+      catch (out_of_range& _) {
+         throw command_error("ls: no such path");
+         return;
+      }
    }
    target->contents->bf_ls();
 }
