@@ -52,10 +52,25 @@ void fn_cat (inode_state& state, const wordvec& words) {
    DEBUGF ('c', words);
 
    if (words.size() == 1) {  // no args
-      throw command_error("make: no arg(s) given");
+      throw command_error("cat: no arg(s) given");
+      return;
    }
 
-
+   bool first_loop = true;
+   for (auto iter = words.begin();
+         iter != words.end(); ++iter) {
+      if (first_loop) {
+         first_loop = false;
+         continue;
+      }
+      
+      if ((*iter).back() == '/') {  // directory is given
+         throw command_error("cat: cannot cat a directory");
+         continue;
+      }
+      
+      state.fs_cat(*iter);
+   }
 }
 
 void fn_cd (inode_state& state, const wordvec& words) {
@@ -120,9 +135,11 @@ void fn_make (inode_state& state, const wordvec& words) {
 
    if (words.size() == 1) {  // no args
       throw command_error("make: no arg(s) given");
+      return;
    }
    if (words.at(1).back() == '/') {  // directory is given
       throw command_error("make: cannot make a directory");
+      return;
    }
 
    state.fs_make(words);

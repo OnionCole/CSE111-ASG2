@@ -12,6 +12,15 @@ using namespace std;
 
 #include "util.h"
 
+// command_error -
+//    Extend runtime_error for throwing exceptions related to this 
+//    program.
+
+class command_error : public runtime_error {
+public:
+   explicit command_error(const string& what);
+};
+
 // inode_t -
 //    An inode is either a directory or a plain file.
 
@@ -53,6 +62,7 @@ class inode_state {
 
       void fs_pwd();
       void fs_make(const wordvec& words);
+      void fs_cat(const string fn);
 };
 
 // class inode -

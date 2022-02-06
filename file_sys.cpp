@@ -76,6 +76,23 @@ void inode_state::fs_make(const wordvec& words) {
    write_file->contents->writefile({words.begin() + 2, words.end()});
 }
 
+void inode_state::fs_cat(const string fn) {
+   // arg fn: filename
+   // cat (on a single file)
+
+   if (!cwd->contents->file_exists(fn)) {  // file does not exist
+      throw command_error("cat: file does not exist");
+      return;
+   }
+
+   wordvec data = cwd->contents->readfile();
+   for (auto iter = data.begin();
+         iter != data.end(); ++iter) {
+      cout << *iter << " ";
+   }
+   cout << endl;
+}
+
 ostream& operator<< (ostream& out, const inode_state& state) {
    out << "inode_state: root = " << state.root
        << ", cwd = " << state.cwd;
