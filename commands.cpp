@@ -158,6 +158,13 @@ void fn_make (inode_state& state, const wordvec& words) {
 void fn_mkdir (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if (words.size() == 1) {  // no args
+      throw command_error("mkdir: no arg(s) given");
+      return;
+   }
+
+   state.fs_mkdir(words.at(1));
 }
 
 void fn_prompt (inode_state& state, const wordvec& words) {

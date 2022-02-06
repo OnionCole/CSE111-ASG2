@@ -62,6 +62,7 @@ class inode_state {
 
       void fs_pwd();
       void fs_make(const wordvec& words);
+      void fs_mkdir(const string path);
       void fs_cat(const string fn);
       void fs_cd(const string path);
 };
@@ -123,7 +124,8 @@ class base_file {
       virtual const wordvec& readfile() const;
       virtual void writefile (const wordvec& newdata);
       virtual void remove (const string& filename);
-      virtual inode_ptr mkdir (const string& dirname);
+      virtual inode_ptr mkdir (const string& dirname, 
+            inode_ptr parent);
       virtual inode_ptr mkfile (const string& filename);
       virtual directory_entries& get_dirents();
 
@@ -183,7 +185,8 @@ class directory: public base_file {
    public:
       virtual size_t size() const override;
       virtual void remove (const string& filename) override;
-      virtual inode_ptr mkdir (const string& dirname) override;
+      virtual inode_ptr mkdir (const string& dirname, 
+            inode_ptr parent) override;
       virtual inode_ptr mkfile (const string& filename) override;
       virtual directory_entries& get_dirents() override;
 

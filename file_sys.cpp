@@ -76,6 +76,19 @@ void inode_state::fs_make(const wordvec& words) {
    write_file->contents->writefile({words.begin() + 2, words.end()});
 }
 
+void inode_state::fs_mkdir(const string path) {
+   // arg words: the words inputted to fn_make
+   // mkdir
+   
+   if (cwd->contents->file_exists(path)) {
+      throw command_error("mkdir: file (dir or plain) already at "
+            "given path");
+      return;
+   }
+
+   inode_ptr new_dir = cwd->contents->mkdir(path, cwd);
+}
+
 void inode_state::fs_cat(const string fn) {
    // arg fn: filename
    // cat (on a single file)
@@ -109,7 +122,7 @@ void inode_state::fs_cd(const string path) {
          return;
       }
       inode_ptr target = dirents.at(path);
-      if (target->contents->file_type == file_type::PLAIN_TYPE) {
+      if (target->contents->file_type().compare("plain file") == 0) {
          throw command_error("cd: path points to plain file");
          return;
       }
@@ -187,7 +200,7 @@ void base_file::remove (const string&) {
    throw file_error ("is a " + file_type());
 }
 
-inode_ptr base_file::mkdir (const string&) {
+inode_ptr base_file::mkdir (const string&, inode_ptr) {
    throw file_error ("is a " + file_type());
 }
 
@@ -240,15 +253,24 @@ void directory::remove (const string& filename) {
    DEBUGF ('i', filename);
 }
 
-inode_ptr directory::mkdir (const string& dirname) {
+inode_ptr directory::mkdir (const string& dirname, inode_ptr parent) {
    DEBUGF ('i', dirname);
-   return nullptr;
+
+   inode_ptr new_inode = make_shared<inode>(file_type::DIRECTORY_TYPE);
+   directory_entries& new_inode_dirents = new_inode->get_dirents();
+   new_inode_dirents.insert(dirent_type(".", new_inode));
+   new_inode_dirents.insert(dirent_type("..", parent));
+
+   dirents.insert({dirname, new_inode});
+
+   return new_inode;
 }
 
 inode_ptr directory::mkfile (const string& filename) {
    DEBUGF ('i', filename);
 
    inode_ptr new_inode = make_shared<inode>(file_type::PLAIN_TYPE);
+   
    dirents.insert({filename, new_inode});
 
    return new_inode;
