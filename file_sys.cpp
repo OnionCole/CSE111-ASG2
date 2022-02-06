@@ -57,6 +57,25 @@ void inode_state::fs_pwd() {
     cout << endl;  // newline
 }
 
+void inode_state::fs_make(const wordvec& words) {
+   // arg words: the words inputted to fn_make
+   // make
+
+   string fn = words.at(1);
+
+   // create the file (if necessary) and get a ptr to its inode
+   inode_ptr write_file;
+   if (cwd->contents->file_exists(fn)) {  // the file 
+         // already exists
+      write_file = cwd->contents->get_dirents().at(fn);
+   } else {
+      write_file = cwd->contents->mkfile(fn);  // make new file
+   }
+
+   // write the data to the file
+   write_file->contents->writefile({words.begin() + 2, words.end()});
+}
+
 ostream& operator<< (ostream& out, const inode_state& state) {
    out << "inode_state: root = " << state.root
        << ", cwd = " << state.cwd;
@@ -129,6 +148,11 @@ directory_entries& base_file::get_dirents() {
    throw file_error ("is a " + file_type());
 }
 
+bool base_file::file_exists(const string&) {
+   throw file_error("is a " + file_type());
+}
+
+
 void base_file::bf_ls() {
    throw file_error("is a " + file_type());
 }
@@ -136,7 +160,7 @@ void base_file::bf_ls() {
 
 
 size_t plain_file::size() const {
-   return display_size;
+   return 999;  // add up the total chars + spaces from the data field
 }
 
 const wordvec& plain_file::readfile() const {
@@ -145,12 +169,20 @@ const wordvec& plain_file::readfile() const {
 }
 
 void plain_file::writefile (const wordvec& words) {
+   // arg words: same as arg to fn_make, first 2 words are thus not
+         // to be written
+   // MEMLEAK FROM NOT FREEING THE OLD DATA?
+   // CONSIDER: IS MAKING A NEW VECTOR OVER THE SAME SUB-ELEMENTS OK?
+
    DEBUGF ('i', words);
+
+   // write data
+   data = words;
 }
 
 
 size_t directory::size() const {
-   return display_size;
+   return dirents.size();
 }
 
 void directory::remove (const string& filename) {
@@ -164,11 +196,24 @@ inode_ptr directory::mkdir (const string& dirname) {
 
 inode_ptr directory::mkfile (const string& filename) {
    DEBUGF ('i', filename);
-   return nullptr;
+
+   inode_ptr new_inode = make_shared<inode>(file_type::PLAIN_TYPE);
+   dirents.insert({filename, new_inode});
+
+   return new_inode;
 }
 
 directory_entries& directory::get_dirents() {
    return dirents;
+}
+
+bool directory::file_exists(const string& name) {
+   // check if a file name exists under this directory
+
+   if (dirents.find(name) == dirents.end()) {  // does not exist
+      return false;
+   }
+   return true;
 }
 
 void directory::bf_ls() {

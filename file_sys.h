@@ -52,6 +52,7 @@ class inode_state {
       inode_ptr get_cwd();
 
       void fs_pwd();
+      void fs_make(const wordvec& words);
 };
 
 // class inode -
@@ -115,6 +116,8 @@ class base_file {
       virtual inode_ptr mkfile (const string& filename);
       virtual directory_entries& get_dirents();
 
+      virtual bool file_exists(const string&);
+
       virtual void bf_ls();
 };
 
@@ -134,8 +137,6 @@ class plain_file: public base_file {
          static const string result = "plain file";
          return result;
       }
-
-      size_t display_size = 0;  // for ls, must be kept updated
    public:
       virtual size_t size() const override;
       virtual const wordvec& readfile() const override;
@@ -168,14 +169,14 @@ class directory: public base_file {
          static const string result = "directory";
          return result;
       }
-
-      size_t display_size = 0;  // for ls, must be kept updated
    public:
       virtual size_t size() const override;
       virtual void remove (const string& filename) override;
       virtual inode_ptr mkdir (const string& dirname) override;
       virtual inode_ptr mkfile (const string& filename) override;
       virtual directory_entries& get_dirents() override;
+
+      virtual bool file_exists(const string&) override;
 
       virtual void bf_ls() override;
 };

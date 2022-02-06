@@ -50,6 +50,12 @@ void fn_comment(inode_state& state, const wordvec& words) {  // do nothing
 void fn_cat (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if (words.size() == 1) {  // no args
+      throw command_error("make: no arg(s) given");
+   }
+
+
 }
 
 void fn_cd (inode_state& state, const wordvec& words) {
@@ -111,6 +117,15 @@ void fn_lsr (inode_state& state, const wordvec& words) {
 void fn_make (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if (words.size() == 1) {  // no args
+      throw command_error("make: no arg(s) given");
+   }
+   if (words.at(1).back() == '/') {  // directory is given
+      throw command_error("make: cannot make a directory");
+   }
+
+   state.fs_make(words);
 }
 
 void fn_mkdir (inode_state& state, const wordvec& words) {
