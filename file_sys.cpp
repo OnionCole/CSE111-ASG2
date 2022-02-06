@@ -324,10 +324,12 @@ void directory::bf_ls() {
 
    map<string, inode_ptr>::iterator iter;
    for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
-      cout << "     " << iter->second->get_inode_nr();
+      cout << std::setw(6);
+      cout << iter->second->get_inode_nr();
       cout << "  ";
-      cout << std::setw(8);
+      cout << std::setw(6);
       cout << iter->second->size();
+      cout << "  ";
       cout << iter->first;
       cout << endl;
    }
