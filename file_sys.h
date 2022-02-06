@@ -60,6 +60,7 @@ class inode_state {
 
       inode_ptr get_cwd();
 
+      void fs_ls(const string path);
       void fs_pwd();
       void fs_make(const wordvec& words);
       void fs_mkdir(const string path);
@@ -95,8 +96,6 @@ class inode {
       directory_entries& get_dirents();
 
       size_t size();
-
-      void fs_ls();
 };
 
 

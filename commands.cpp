@@ -122,14 +122,19 @@ void fn_ls (inode_state& state, const wordvec& words) {
 
    if (words.size() == 1) {  // if no args are given, use cwd for a
          // single call
-      state.get_cwd()->fs_ls();
+      state.fs_ls(".");
    } else {  // we have to take each arg as a target
-
-      //// find target for ls
-      //inode_ptr target;
-
-      //// do the ls
-      //target->fs_ls();
+      bool first_loop = true;
+      for (auto iter = words.begin();
+            iter != words.end(); ++iter) {
+         if (first_loop) {
+            first_loop = false;
+            continue;
+         }
+         
+         // for each target
+         state.fs_ls(*iter);
+      }
    }
 }
 

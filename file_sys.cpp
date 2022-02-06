@@ -43,6 +43,21 @@ inode_ptr inode_state::get_cwd() {
    return cwd;
 }
 
+void inode_state::fs_ls(const string path) {
+   // ls with the cwd and path to determine target, can work max one 
+         // level from cwd 
+   // (only works if inode points to a dir)
+
+   inode_ptr target = nullptr;
+   try {
+      target = cwd->contents->get_dirents().at(path);
+   } catch (out_of_range& _) {
+      throw command_error("ls: no such path");
+      return;
+   }
+   target->contents->bf_ls();
+}
+
 void inode_state::fs_pwd() {
     // pwd
 
@@ -173,13 +188,6 @@ size_t inode::size() {
          // for a file thats how many chars
 
    return contents->size();
-}
-
-void inode::fs_ls() {
-   // ls with this inode as target (only works if inode points to a 
-         // dir)
-
-   contents->bf_ls();
 }
 
 
