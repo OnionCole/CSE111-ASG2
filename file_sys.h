@@ -95,6 +95,7 @@ class inode {
       size_t get_inode_nr() const;
       directory_entries& get_dirents();
 
+      const string& get_file_type();
       size_t size();
 };
 

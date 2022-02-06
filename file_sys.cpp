@@ -195,6 +195,10 @@ directory_entries& inode::get_dirents() {
    return contents->get_dirents();
 }
 
+const string& inode::get_file_type() {
+   return contents->file_type();
+}
+
 size_t inode::size() {
    // return the "size" of this inode, for a dir thats how many elements
          // for a file thats how many chars
@@ -332,6 +336,9 @@ void directory::bf_ls() {
       cout << iter->second->size();
       cout << "  ";
       cout << iter->first;
+      if (iter->second->get_file_type().compare("directory") == 0) {
+         cout << "/";
+      }
       cout << endl;
    }
 }
