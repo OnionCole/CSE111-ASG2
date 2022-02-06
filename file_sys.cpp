@@ -176,7 +176,7 @@ size_t inode::size() {
 }
 
 void inode::fs_ls() {
-   // ls with this inode as target (only words if inode points to a 
+   // ls with this inode as target (only works if inode points to a 
          // dir)
 
    contents->bf_ls();
@@ -294,9 +294,9 @@ void directory::bf_ls() {
 
    map<string, inode_ptr>::iterator iter;
    for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
-      cout << iter->second->get_inode_nr() << std::setw(6);
-      cout << iter->second->size() << std::setw(6);
-      cout << iter->first << std::setw(6);
+      cout << iter->second->get_inode_nr() << std::setw(6) << "  ";
+      cout << iter->second->size() << std::setw(6) << "  ";
+      cout << iter->first;
       cout << endl;
    }
 }
