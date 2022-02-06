@@ -326,8 +326,8 @@ void directory::bf_ls() {
    for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
       cout << "     " << iter->second->get_inode_nr();
       cout << "  ";
-      cout << iter->second->size() << std::setw(6);
-      cout << "  ";
+      cout << std::setw(8);
+      cout << iter->second->size();
       cout << iter->first;
       cout << endl;
    }
