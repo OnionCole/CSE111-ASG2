@@ -49,7 +49,9 @@ class inode_state {
       void prompt (const string&);
       const inode_ptr get_root() const { return root; }
 
-      void cout_abs_path();
+      inode_ptr get_cwd();
+
+      void fs_pwd();
 };
 
 // class inode -
@@ -78,6 +80,8 @@ class inode {
       inode (file_type);
       size_t get_inode_nr() const;
       directory_entries& get_dirents();
+
+      void fs_ls();
 };
 
 
@@ -108,6 +112,8 @@ class base_file {
       virtual inode_ptr mkdir (const string& dirname);
       virtual inode_ptr mkfile (const string& filename);
       virtual directory_entries& get_dirents();
+
+      virtual void bf_ls();
 };
 
 // class plain_file -
@@ -164,6 +170,8 @@ class directory: public base_file {
       virtual inode_ptr mkdir (const string& dirname) override;
       virtual inode_ptr mkfile (const string& filename) override;
       virtual directory_entries& get_dirents() override;
+
+      virtual void bf_ls() override;
 };
 
 #endif

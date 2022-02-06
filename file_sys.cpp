@@ -38,8 +38,12 @@ void inode_state::prompt (const string& new_prompt) {
    prompt_ = new_prompt;
 }
 
-void inode_state::cout_abs_path() {
-    // cout the stored abs_path, for pwd command
+inode_ptr inode_state::get_cwd() {
+   return cwd;
+}
+
+void inode_state::fs_pwd() {
+    // pwd
 
     for (auto iter = abs_path_str.begin();
            iter != abs_path_str.end(); ++iter) {
@@ -80,6 +84,13 @@ directory_entries& inode::get_dirents() {
    return contents->get_dirents();
 }
 
+void inode::fs_ls() {
+   // ls with this inode as target (only words if inode points to a 
+         // dir)
+
+   contents->bf_ls();
+}
+
 
 
 file_error::file_error (const string& what):
@@ -110,6 +121,10 @@ directory_entries& base_file::get_dirents() {
    throw file_error ("is a " + file_type());
 }
 
+void base_file::bf_ls() {
+   throw file_error("is a " + file_type());
+}
+
 
 
 size_t plain_file::size() const {
@@ -126,6 +141,7 @@ const wordvec& plain_file::readfile() const {
 void plain_file::writefile (const wordvec& words) {
    DEBUGF ('i', words);
 }
+
 
 size_t directory::size() const {
    size_t size {0};
@@ -149,5 +165,11 @@ inode_ptr directory::mkfile (const string& filename) {
 
 directory_entries& directory::get_dirents() {
    return dirents;
+}
+
+void directory::bf_ls() {
+   // do the ls output for this dir as the target
+
+
 }
 

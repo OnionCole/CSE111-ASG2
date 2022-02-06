@@ -66,6 +66,16 @@ void fn_echo (inode_state& state, const wordvec& words) {
 void fn_exit (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
+
+   if (words.size() > 1) {  // exit code is given
+      int status_val;
+      try {
+         status_val = stoi(words.at(1));
+      } catch (...) {
+         status_val = 127;
+      }
+      exec::status(status_val);
+   }
    throw ysh_exit();
 }
 
@@ -78,6 +88,18 @@ void fn_ls (inode_state& state, const wordvec& words) {
          cerr << "\"" << entry.first << "\"->" << entry.second << endl;
       }
     );
+
+   if (words.size() == 1) {  // if no args are given, use cwd for a
+         // single call
+      state.get_cwd()->fs_ls();
+   } else {  // we have to take each arg as a target
+
+      //// find target for ls
+      //inode_ptr target;
+
+      //// do the ls
+      //target->fs_ls();
+   }
 }
 
 void fn_lsr (inode_state& state, const wordvec& words) {
@@ -117,15 +139,13 @@ void fn_prompt (inode_state& state, const wordvec& words) {
    }
 
    state.prompt(new_prompt);
-
-   // MEM LEAK?
 }
 
 void fn_pwd (inode_state& state, const wordvec& words) {
    DEBUGF ('c', state);
    DEBUGF ('c', words);
 
-   state.cout_abs_path();
+   state.fs_pwd();
 }
 
 void fn_rm (inode_state& state, const wordvec& words) {
