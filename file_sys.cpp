@@ -60,6 +60,12 @@ void inode_state::fs_ls(const string path) {
          return;
       }
    }
+   if (path.compare(".") == 0 && cwd == root) {  // special print case
+         // for "ls" in root
+      cout << "/:" << endl;
+   } else {
+      cout << path << ":" << endl;
+   }
    target->contents->bf_ls();
 }
 
