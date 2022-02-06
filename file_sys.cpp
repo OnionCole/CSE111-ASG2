@@ -124,7 +124,7 @@ void inode_state::fs_cat(const string fn) {
       return;
    }
 
-   wordvec data = cwd->contents->readfile();
+   wordvec data = cwd->contents->get_dirents().at(fn)->contents->readfile();
    for (auto iter = data.begin();
          iter != data.end(); ++iter) {
       cout << *iter << " ";
@@ -313,8 +313,10 @@ void directory::bf_ls() {
 
    map<string, inode_ptr>::iterator iter;
    for (iter = dirents.begin(); iter != dirents.end(); ++iter) {
-      cout << iter->second->get_inode_nr() << std::setw(6) << "  ";
-      cout << iter->second->size() << std::setw(6) << "  ";
+      cout << iter->second->get_inode_nr() << std::setw(6);
+      cout << "  ";
+      cout << iter->second->size() << std::setw(6);
+      cout << "  ";
       cout << iter->first;
       cout << endl;
    }
